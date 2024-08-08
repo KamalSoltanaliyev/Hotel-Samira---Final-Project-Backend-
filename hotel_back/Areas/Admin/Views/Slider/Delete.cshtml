@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="content-wrapper">
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <img class="card-img-top mx-auto d-block mt-3" src="~/assets/images/@Model.Image" style="width: 50%" alt="Card image cap">
+                <div class="card-body">
+                    <p class="card-text">Description: @Model.Description</p>
+                    <div class="btn-box d-flex">
+                        <a asp-action="Index" class="btn btn-primary mr-3">Go Back</a>
+                        <form method="post">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Search";
+}
+
+@model ProductImageViewModel
+
+<link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="~/assets/css/rooms.css" />
+<link rel="stylesheet" href="~/assets/css/index.css">
+
+<style>
+    .shop{
+        width: 600px;
+        margin-top: 50px;
+    }
+</style>
+
+<section class="shop container">
+    <h2 class="section-title">Search Results</h2>
+    <div class="shop-content" id="productBox">
+        @if (Model != null && Model.Products.Count > 0)
+        {
+            @foreach (var product in Model.Products)
+            {
+                <div class="product-box">
+                    @if (product.Images.FirstOrDefault(i => i.Image != null) != null)
+                    {
+                        <a asp-controller="Product" asp-action="ProductDetail" asp-route-id="@product.Id">
+                            <img src="~/assets/images/@product.Images.FirstOrDefault(i => i.Image != null).Image" alt="" class="product-img" />
+                        </a>
+                    }
+                    <div class="stars">
+                        @{
+                            int fullStars = (int)Math.Floor(product.Rating);
+                            bool hasHalfStar = product.Rating - fullStars >= 0.5;
+                            int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                        }
+
+                        @for (var i = 0; i < fullStars; i++)
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        @if (hasHalfStar)
+                        {
+                            <i class="fas fa-star-half-alt"></i>
+                        }
+                        @for (var i = 0; i < emptyStars; i++)
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    </div>
+                    <h2 class="product-title">@product.Title</h2>
+                    <span class="product-price">$@product.Price/night</span>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No products found.</p>
+        }
+    </div>
+</section>
+
+
+
+<script src="~/assets/js/rooms.js"></script>
+

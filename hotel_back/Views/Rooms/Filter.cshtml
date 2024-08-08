@@ -1,0 +1,124 @@
+﻿@model HomeViewModel
+
+@{
+    ViewData["Title"] = "Filtered Products";
+}
+
+<link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="~/assets/css/rooms.css" />
+<link rel="stylesheet" href="~/assets/css/index.css">
+
+<style>
+    .nav {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .quantity {
+        margin-left: 5px;
+        background-color: #ac9c8d;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .cart-content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .cart-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    .cart-img {
+        width: 100px;
+        height: 80px;
+        object-fit: cover;
+    }
+
+    .detail-box {
+        flex-grow: 1;
+        margin-left: 10px;
+    }
+
+    .cart-product-title {
+        font-size: large;
+        font-weight: bold;
+    }
+
+    .cart-price {
+        font-size: medium;
+    }
+
+    .shop {
+        width: 100%;
+        margin-top: 100px;
+    }
+
+    .shop-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .product-box {
+        width: calc(33.333% - 20px);
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+</style>
+
+<h1>Filtered Products</h1>
+
+<section class="shop container">
+    <h2 class="section-title">Filtered Rooms</h2>
+    <div class="shop-content">
+        @foreach (var product in Model.Products)
+        {
+            <div class="product-box">
+                @if (product.Images.FirstOrDefault(i => i.Image != null) != null)
+                {
+                    <a asp-controller="Product" asp-action="ProductDetail" asp-route-id="@product.Id">
+                        <img src="~/assets/images/@product.Images.FirstOrDefault(i => i.Image != null).Image" alt="" class="product-img" />
+                    </a>
+                }
+                <div class="stars">
+                    @{
+                        int fullStars = (int)Math.Floor(product.Rating);
+                        bool hasHalfStar = product.Rating - fullStars >= 0.5;
+                        int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                    }
+
+                    @for (var i = 0; i < fullStars; i++)
+                    {
+                        <i class="fas fa-star"></i>
+                    }
+                    @if (hasHalfStar)
+                    {
+                        <i class="fas fa-star-half-alt"></i>
+                    }
+                    @for (var i = 0; i < emptyStars; i++)
+                    {
+                        <i class="far fa-star"></i>
+                    }
+                </div>
+                <h2 class="product-title">@product.Title</h2>
+                <span class="product-price">$@product.Price/night</span>
+            </div>
+        }
+    </div>
+</section>

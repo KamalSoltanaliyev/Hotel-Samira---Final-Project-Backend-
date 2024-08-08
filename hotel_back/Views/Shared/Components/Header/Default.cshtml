@@ -1,0 +1,39 @@
+﻿@{
+    Layout = null;
+}
+
+@model Dictionary<string, string>
+
+@* <style>
+    .search {
+        margin: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+        .search input[type="search"] {
+            width: 200px;
+            font-size: medium;
+            border-radius: 4px;
+        }
+</style> *@
+<!-- header area -->
+<header class="header">
+    <a asp-controller="Home" class="logo"> <i class="@Model["Logo"]"></i>Hotel Samira</a>
+
+    <form asp-controller="Rooms" asp-action="Search" method="post" class="search" role="search">
+        <input type="search" name="Searching" placeholder="Search" />
+    </form>
+
+    <nav class="navbar" style="text-decoration: none;">
+        <a asp-controller="Home" asp-action="Index">Home</a>
+        <a asp-controller="About" asp-action="Index">About</a>
+        <a asp-controller="Rooms" asp-action="Index">Rooms</a>
+        <a asp-controller="Gallery" asp-action="Index">Gallery</a>
+        <a asp-controller="Review" asp-action="Index">Review</a>
+        <a asp-controller="FAQ" asp-action="Index">FAQ</a>
+        <a asp-controller="BookNow" asp-action="Index" class="btn">Book Now</a>
+    </nav>
+</header>
+
+<!-- end header area -->

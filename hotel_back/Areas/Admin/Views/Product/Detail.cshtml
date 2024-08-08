@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewData["Title"] = "Detail";
+}
+
+@model Product
+
+<style>
+    .image-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px; 
+    }
+
+    .card-img-top {
+        max-width: 300px;
+        max-height: 300px;
+    }
+</style>
+
+<div class="content-wrapper">
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-6">
+            <div class="card">
+
+                <div class="image-container">
+                    @foreach (var image in Model.Images)
+                    {
+                        <img class="card-img-top" src="~/assets/images/@image.Image" alt="Card image cap">
+                    }
+                </div>
+
+                <div class="card-body">
+                    <p class="card-text">Title: @Model.Title</p>
+                    <p class="card-text">Description: @Model.Description</p>
+                    <p class="card-text">Number of Rooms: @Model.Rooms</p>
+                    <p class="card-text">Number of Adults: @Model.Adults</p>
+                    <p class="card-text">Number of Children: @Model.Children</p>
+                    <p class="card-text">Floor: @Model.Floor</p>
+                    <p class="card-text">Number of Beds: @Model.NumberOfBeds</p>
+                    <p class="card-text">Bed Size: @Model.BedSize</p>
+                    <p class="card-text">Area: @Model.Area</p>
+                    <p class="card-text">Check In: @Model.CheckIn</p>
+                    <p class="card-text">Check Out: @Model.CheckOut</p>
+                    <p class="card-text">Rating: @Model.Rating</p>
+                    <p class="card-text">Price: $@Model.Price/night</p>
+                    <a asp-action="Index" class="btn btn-primary">Go Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Detail";
+}
+
+@model Review
+
+<div class="content-wrapper">
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <img class="card-img-top mx-auto d-block mt-3" src="~/assets/images/@Model.Image" style="width: 50%" alt="Card image cap">
+                <div class="card-body">
+                    <p class="card-text">Name: @Model.Name</p>
+                    <p class="card-text">Description: @Model.Description</p>
+                    <p class="card-text">Rating: @Model.Rating</p>
+                    <a asp-action="Index" class="btn btn-primary">Go Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

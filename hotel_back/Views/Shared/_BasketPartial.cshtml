@@ -1,0 +1,60 @@
+﻿@model List<BasketItem>
+
+<link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="~/assets/css/rooms.css" />
+<link rel="stylesheet" href="~/assets/css/index.css">
+
+@foreach (var item in Model)
+{
+    <div id="basket-item-@item.Product.Id">
+        <img src="~/assets/images/@item.Product.Images.FirstOrDefault(i => i.Image != null).Image" alt="" class="cart-img">
+        <div class="detail-box">
+            <div class="cart-product-title">@item.Product.Title</div>
+            <div class="cart-price">$@item.Product.Price/night</div>
+            <input style="display: none;" type="number" value="1" class="cart-quantity">
+            <!-- REMOVE CART  -->
+            <i class='bx bxs-trash-alt cart-remove' data-product-id="@item.Product.Id"></i>
+        </div>
+    </div>
+}
+
+<script src="~/backend/js/script.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const basketItems = document.getElementById("basket-items");
+        const basketCount = document.getElementById("basket-count");
+
+        basketItems.addEventListener("click", function (e) {
+            if (e.target.classList.contains("cart-remove")) {
+                const productId = e.target.getAttribute("data-product-id");
+                removeProductFromBasket(productId);
+            }
+        });
+
+        function removeProductFromBasket(productId) {
+            fetch(`/Rooms/RemoveProductFromBasket?productId=${productId}`, {
+                method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const itemElement = document.getElementById(`basket-item-${productId}`);
+                        if (itemElement) {
+                            itemElement.remove();
+                        }
+                        const currentCount = parseInt(basketCount.textContent);
+                        basketCount.textContent = currentCount - 1;
+                    } else {
+                        alert(data.message);
+                    }
+                });
+        }
+    });
+</script>

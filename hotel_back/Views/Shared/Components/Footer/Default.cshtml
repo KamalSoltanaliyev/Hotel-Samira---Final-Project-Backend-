@@ -1,0 +1,69 @@
+﻿@{
+    Layout = null;
+}
+
+@model Dictionary<string, string>
+
+<section class="footer">
+    <div class="box-container">
+        <div class="box">
+            <h3>Contact Info</h3>
+            <a href="#"> <i class="fas fa-phone"></i> @Model["FooterPhoneNumber1"] </a>
+            <a href="#"> <i class="fas fa-phone"></i> @Model["FooterPhoneNumber2"]</a>
+            <a href="#"> <i class="fas fa-envelope"></i> @Model["FooterEmail"]</a>
+            <a href="#"> <i class="fas fa-map"></i> @Model["FooterAddress"]</a>
+        </div>
+
+        <div class="box">
+            <h3>Quick Links</h3>
+            <div class="box">
+                <a asp-controller="Home" asp-action="Index"><i class="fas fa-arrow-right"></i> Home</a>
+                <a asp-controller="About" asp-action="Index"><i class="fas fa-arrow-right"></i> About</a>
+                <a asp-controller="Rooms" asp-action="Index"><i class="fas fa-arrow-right"></i> Rooms</a>
+                <a asp-controller="Gallery" asp-action="Index"><i class="fas fa-arrow-right"></i> Gallery</a>
+                <a asp-controller="Review" asp-action="Index"><i class="fas fa-arrow-right"></i> Review</a>
+                <a asp-controller="FAQ" asp-action="Index"><i class="fas fa-arrow-right"></i> FAQ</a>
+                <a asp-controller="BookNow" asp-action="Index"><i class="fas fa-arrow-right"></i> Book Now</a>
+            </div>
+
+        </div>
+
+        <div class="box">
+            <h3>Links for Users</h3>
+            <h3>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a class="dropdown-item" asp-action="Profile" asp-controller="User">@User.Identity.Name</a>
+                }
+            </h3>
+            @* <a asp-controller="Auth" asp-action="Login"> <i class="fas fa-arrow-right"></i> Log In</a>
+            <a asp-controller="User" asp-action="Register">
+            <i class="fas fa-arrow-right"></i> Register
+            </a> *@
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a class="dropdown-item" asp-controller="Auth" asp-action="Logout">Logout</a>
+            }
+            else
+            {
+                <a asp-controller="Auth" asp-action="Login"><i class="fas fa-arrow-right"></i>Login</a>
+                <a asp-controller="User" asp-action="Register"><i class="fas fa-arrow-right"></i>Register</a>
+            }
+            <a asp-controller="User" asp-action="Profile"> <i class="fas fa-arrow-right"></i> User Profile</a>
+
+        </div>
+    </div>
+
+    <div class="share">
+        <a href="@Model["FacebookLink"]" class="@Model["FacebookIcon"]"></a>
+        <a href="@Model["InstagramLink"]" class="@Model["InstagramIcon"]"></a>
+        <a href="@Model["TwitterLink"]" class="@Model["TwitterIcon"]"></a>
+        <a href="@Model["PinterestLink"]" class="@Model["PinterestIcon"]"></a>
+    </div>
+
+    <div class="credit">
+        &copy; Copyright 2024 by <span>Kamal Soltanaliyev</span>
+    </div>
+</section>
+
+<!-- end footer -->

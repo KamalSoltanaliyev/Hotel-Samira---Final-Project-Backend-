@@ -1,0 +1,35 @@
+﻿@model List<Product>
+
+@foreach (var product in Model)
+{
+    <div class="product-box">
+        <a asp-controller="Product" asp-action="ProductDetail" asp-route-id="@product.Id">
+            <img src="~/assets/images/@product.Images.FirstOrDefault(i => i.Image != null).Image" alt="" class="product-img" />
+        </a>
+        <div class="stars">
+            @{
+                int fullStars = (int)Math.Floor(product.Rating);
+                bool hasHalfStar = product.Rating - fullStars >= 0.5;
+                int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            }
+
+            @for (var i = 0; i < fullStars; i++)
+            {
+                <i class="fas fa-star"></i>
+            }
+            @if (hasHalfStar)
+            {
+                <i class="fas fa-star-half-alt"></i>
+            }
+            @for (var i = 0; i < emptyStars; i++)
+            {
+                <i class="far fa-star"></i>
+            }
+        </div>
+        <h2 class="product-title">@product.Title</h2>
+        <span class="product-price">$@product.Price/night</span>
+        <a href="@Url.Action("AddProductToBasket", "Rooms", new { productId = product.Id })" class="add-to-basket">
+            <i class="fas fa-shopping-cart add-cart"></i>
+        </a>
+    </div>
+}

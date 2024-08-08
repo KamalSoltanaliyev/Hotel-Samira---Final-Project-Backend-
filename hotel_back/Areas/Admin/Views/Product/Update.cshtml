@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewData["Title"] = "Update Room";
+}
+
+@model ProductUpdateViewModel
+
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Default form</h4>
+                    <p class="card-description">
+                        Basic form layout
+                    </p>
+                    <form class="forms-sample" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="Title">Title</label>
+                            <input class="form-control" asp-for="Title" placeholder="Title">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Rooms">Number of Rooms</label>
+                            <input class="form-control" asp-for="Rooms" placeholder="Rooms">
+                            <span asp-validation-for="Rooms" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Adults">Number of Adults</label>
+                            <input class="form-control" asp-for="Adults" placeholder="Adults">
+                            <span asp-validation-for="Adults" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Children">Number of Children</label>
+                            <input class="form-control" asp-for="Children" placeholder="Children">
+                            <span asp-validation-for="Children" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Floor">Floor</label>
+                            <input class="form-control" asp-for="Floor" placeholder="Floor">
+                            <span asp-validation-for="Floor" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="NumberOfBeds">Number of Beds</label>
+                            <input class="form-control" asp-for="NumberOfBeds" placeholder="Number Of Beds">
+                            <span asp-validation-for="NumberOfBeds" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="BedSize">The Size of Bed</label>
+                            <input class="form-control" asp-for="BedSize" placeholder="Bed Size">
+                            <span asp-validation-for="BedSize" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Area">Area</label>
+                            <input class="form-control" asp-for="Area" placeholder="Area">
+                            <span asp-validation-for="Area" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="CheckIn">Chech In</label>
+                            <input type="date" class="form-control" asp-for="CheckIn" placeholder="Check In">
+                            <span asp-validation-for="CheckIn" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="CheckOut">Check Out</label>
+                            <input type="date" class="form-control" asp-for="CheckOut" placeholder="Check Out">
+                            <span asp-validation-for="CheckOut" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Description">Description</label>
+                            <input class="form-control" asp-for="Description" placeholder="Description">
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Price">Price</label>
+                            <input class="form-control" asp-for="Price" placeholder="Price">
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="Rating">Rating</label>
+                            <input class="form-control" asp-for="Rating" placeholder="Rating">
+                            <span asp-validation-for="Rating" class="text-danger"></span>
+                        </div>
+                        @* <div class="form-group">
+                            <label for="Image">Image</label>
+                            <input class="form-control" asp-for="Image" placeholder="Image">
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div> *@
+
+                        <label for="exampleInputPassword1">Product Images</label><br>
+                        <p class="text-danger">Attention: There needs to be at least one image of product!</p>
+                        @foreach (var image in Model.ProductImages)
+                        {
+                            <div class="form-group">
+                                <img class="p-image" src="~/assets/images/@image.Image"
+                                     alt="@Model.Title" width="300" height="200"><br>
+                            </div>
+                            <a class="btn btn-danger deleteImageBtn" asp-action="DeleteImage" asp-route-id="@image.Id" asp-route-imageId="@Model.Id">
+                                <i class="fa-solid fa-trash"></i> Delete image
+                            </a> <br>
+
+                            <br>
+                        }
+                        <div class="form-group" id="imageInputs">
+                            <label for="Image">Add new image</label>
+                            <span asp-validation-for="ProductImage" class="text-danger"></span>
+                            <input id="imageInput" class="form-control product-image-input" asp-for="ProductImage" placeholder="Image" accept="image/*">
+                        </div>
+                        <button type="button" id="addImageUpdate" class="btn-success">Add Image</button><br><br>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Categories</label>
+                            <select class="form-control" id="exampleFormControlSelect2" name="categoryId">
+                                @foreach (Category category in ViewBag.Categories)
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-warning mr-2">Update</button>
+                        <button class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

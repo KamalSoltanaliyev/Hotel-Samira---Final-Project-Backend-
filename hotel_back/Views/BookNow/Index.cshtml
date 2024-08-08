@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Book Now";
+}
+@model HomeViewModel
+<link rel="stylesheet" href="~/assets/css/book.css" />
+
+<section class="reservation" id="reservation">
+    <h1 class="heading">Book Now</h1>
+
+    <form asp-action="Book" method="post">
+        <div class="container">
+            <div class="box">
+                <p>Name </p>
+                <input class="input" name="Name" />
+            </div>
+
+            <div class="box">
+                <p>Surname </p>
+                <input class="input" name="Surname" />
+            </div>
+
+            <div class="box">
+                <p>Phone Number </p>
+                <input type="tel" class="input" name="PhoneNumber" />
+            </div>
+
+            <div class="box">
+                <p>Check In <span>*</span></p>
+                <input type="date" class="input" name="CheckIn" />
+            </div>
+
+            <div class="box">
+                <p>Check Out <span>*</span></p>
+                <input type="date" class="input" name="CheckOut" />
+            </div>
+
+            <div class="box">
+                <p>Adults <span>*</span></p>
+                <select name="Adults" class="input">
+                    <option value="1">1 adult</option>
+                    <option value="2">2 adults</option>
+                    <option value="3">3 adults</option>
+                    <option value="4">4 adults</option>
+                    <option value="5">5 adults</option>
+                    <option value="6">6 adults</option>
+                </select>
+            </div>
+
+            <div class="box">
+                <p>Children <span>*</span></p>
+                <select name="Children" class="input">
+                    <option value="0">0 children</option>
+                    <option value="1">1 child</option>
+                    <option value="2">2 children</option>
+                    <option value="3">3 children</option>
+                    <option value="4">4 children</option>
+                    <option value="5">5 children</option>
+                    <option value="6">6 children</option>
+                </select>
+            </div>
+
+            <div class="box">
+                <p>Rooms <span>*</span></p>
+                <select name="Rooms" class="input">
+                    <option value="1">1 room</option>
+                    <option value="2">2 rooms</option>
+                    <option value="3">3 rooms</option>
+                    <option value="4">4 rooms</option>
+                    <option value="5">5 rooms</option>
+                    <option value="6">6 rooms</option>
+                </select>
+            </div>
+
+            <div class="box">
+                <p>Room Type <span>*</span></p>
+                <select name="CategoryId" class="input">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="box">
+                <p>Special Requests</p>
+                <input class="input" name="SpecialRequests" />
+            </div>
+
+            <input type="hidden" name="userId" value="@User.Identity.Name" />
+        </div>
+
+        <button type="submit" class="btn">book now</button>
+    </form>
+</section>

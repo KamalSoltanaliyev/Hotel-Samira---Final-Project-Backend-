@@ -1,0 +1,336 @@
+﻿@model HomeViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+<!-- home -->
+
+
+<style>
+    /* Стили для скрытого текста */
+    .content .box p {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+        padding: 0 1rem;
+        opacity: 0;
+    }
+
+    /* Стили для отображения текста */
+    .content .box.active p {
+        max-height: 100px;
+        opacity: 1;
+        padding: 1rem;
+    }
+
+    /* Дополнительные стили */
+    .faqs .heading {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .faqs .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .faqs .image {
+        flex: 1;
+    }
+
+        .faqs .image img {
+            width: 100%;
+            height: auto;
+        }
+
+    .faqs .content {
+        flex: 1;
+        padding: 2rem;
+    }
+
+        .faqs .content .box {
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            padding: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .faqs .content .box h3 {
+                margin: 0;
+            }
+
+            .faqs .content .box:hover {
+                background-color: #f9f9f9;
+            }
+
+            .faqs .content .box.active {
+                background-color: #f1f1f1;
+            }
+</style>
+
+
+
+
+
+<section class="home" id="home">
+    <div class="swiper home-slider">
+        <div class="swiper-wrapper">
+            @foreach (var slider in Model.Sliders)
+            {
+                <div class="swiper-slide slide"
+                     style="background: url('@Url.Content($"~/assets/images/{slider.Image}")') no-repeat">
+                    <div class="content">
+                        <h3>@slider.Description</h3>
+                        <a asp-controller="Rooms" class="btn"> visit our offer</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+<!-- end -->
+<!-- about -->
+
+<section class="about" id="about">
+    <div class="row">
+        <div class="image">
+            <img src="~/assets/images/about.jpg" alt="" />
+        </div>
+
+        <div class="content">
+            <h3>About Us</h3>
+            <p>
+                Welcome to Samira Hotel, where luxury meets comfort in the heart of
+                Azerbaijan. Our dedicated staff ensures an exceptional stay from
+                check-in to check-out. Indulge in our elegant rooms, savor gourmet
+                cuisine at our onsite restaurant, and relax in our spa or fitness
+                center. Experience unparalleled hospitality at Samira Hotel. Book
+                your stay today!
+            </p>
+            <p>
+                Explore more during your stay at Samira Hotel. Discover local
+                attractions with our concierge, relax in our renovated rooms, and
+                indulge in culinary delights at our restaurant. Whether for business
+                or pleasure, elevate your experience with us.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- end -->
+<!-- room -->
+
+<section class="room" id="room">
+    <h1 class="heading">Our Rooms</h1>
+
+    <div class="swiper room-slider">
+        <div class="swiper-wrapper">
+            @foreach (var product in Model.Products)
+            {
+                <div class="swiper-slide slide">
+                    <div class="image">
+                        <span class="price">$@product.Price/night</span>
+                        @if (@product.Images.FirstOrDefault(i => i.Image != null) != null)
+                        {
+                            <img src="~/assets/images/@product.Images.FirstOrDefault(i => i.Image != null).Image" alt="" />
+                        }
+                    </div>
+                    <div class="content">
+                        <h3>@product.Title</h3>
+                        <p>
+                            @product.Description
+                        </p>
+                        <div class="stars">
+                            @{
+                                int fullStars = (int)Math.Floor(product.Rating);
+                                bool hasHalfStar = product.Rating - fullStars >= 0.5;
+                                int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                            }
+
+                            @for (var i = 0; i < fullStars; i++)
+                            {
+                                <i class="fas fa-star"></i>
+                            }
+                            @if (hasHalfStar)
+                            {
+                                <i class="fas fa-star-half-alt"></i>
+                            }
+                            @for (var i = 0; i < emptyStars; i++)
+                            {
+                                <i class="far fa-star"></i>
+                            }
+                        </div>
+                        <a asp-controller="Product" asp-action="ProductDetail" asp-route-id="@product.Id" class="btn">details</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+<!-- end -->
+<!-- services -->
+
+<section class="services">
+    <div class="box-container">
+        <div class="box">
+            <img src="~/assets/images/service1.jpg" alt="" />
+            <h3>Swimming Pool</h3>
+        </div>
+
+        <div class="box">
+            <img src="~/assets/images/service2.png" alt="" />
+            <h3>Food & Drink</h3>
+        </div>
+
+        <div class="box">
+            <img src="~/assets/images/service3.png" alt="" />
+            <h3>Restaurant</h3>
+        </div>
+
+        <div class="box">
+            <img src="~/assets/images/service4.png" alt="" />
+            <h3>Fitness</h3>
+        </div>
+
+        <div class="box">
+            <img src="~/assets/images/service5.png" alt="" />
+            <h3>Beauty Spa</h3>
+        </div>
+
+        <div class="box">
+            <img src="~/assets/images/service6.png" alt="" />
+            <h3>Resort Beach</h3>
+        </div>
+    </div>
+</section>
+
+<!-- end -->
+<!-- review -->
+
+<section style="background-image: url('@Url.Content("~/assets/images/review.jpg")');" class="review" id="review">
+    <div class="swiper review-slider">
+        <div class="swiper-wrapper">
+            @foreach (var review in Model.Reviews)
+            {
+                <div class="swiper-slide slide">
+                    <h2 class="heading">Client's Review</h2>
+                    <i class="fas fa-quote-right"></i>
+                    <p>
+                        @review.Description
+                    </p>
+                    <div class="user">
+                        <img src="~/assets/images/@review.Image" alt="" />
+                        <div class="user-info">
+                            <h3>@review.Name</h3>
+                            <div class="stars">
+                                @{
+                                    int fullStars = (int)Math.Floor(review.Rating);
+                                    bool hasHalfStar = review.Rating - fullStars >= 0.5;
+                                    int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                                }
+
+                                @for (var i = 0; i < fullStars; i++)
+                                {
+                                    <i class="fas fa-star"></i>
+                                }
+                                @if (hasHalfStar)
+                                {
+                                    <i class="fas fa-star-half-alt"></i>
+                                }
+                                @for (var i = 0; i < emptyStars; i++)
+                                {
+                                    <i class="far fa-star"></i>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+<!-- end -->
+<!-- faq -->
+
+<section class="faqs" id="faq">
+    <h1 class="heading">Frequently Asked Questions</h1>
+
+    <div class="row">
+        <div class="image">
+            <img src="~/assets/images/faq.jpg" alt="" />
+        </div>
+
+        <div class="content">
+
+            <div class="box">
+                <h3>How can you login?</h3>
+                <p>
+                    At the bottom of the page, click on Log In, enter your name (email) and password.
+                </p>
+            </div>
+
+            <div class="box">
+                <h3>How can you register?</h3>
+                <p>
+                    At the bottom of the page, click on Register, enter your name (email) and enter your password.
+                </p>
+            </div>
+
+            <div class="box">
+                <h3>How can I change my profile settings or log out?</h3>
+                <p>
+                    At the bottom of the page, click on User Profile, and you can change any proporties.
+                </p>
+            </div>
+
+            <div class="box">
+                <h3>What are payment methods?</h3>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam
+                    cupiditate mollitia.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- end -->
+<!-- about -->
+
+<section class="about" id="about">
+    <div class="row">
+
+        <div class="content">
+            <h3>Book Now</h3>
+            <p>
+                From our elegantly furnished rooms to our top-notch amenities, including a modern fitness center, an exquisite restaurant, and a serene spa, every detail at Hotel Samira is designed with your comfort in mind. Our dedicated staff is committed to providing personalized service to ensure your stay exceeds all expectations.
+            </p>
+            <p>
+                If you find our hotel and its offerings appealing, we invite you to book your stay with us and experience the magic of Baku. Immerse yourself in the rich culture, history, and hospitality that our city has to offer.
+            </p>
+            <p>
+                Make your reservation today and get ready to create unforgettable memories at Hotel Samira. We look forward to welcoming you soon!
+            </p>
+        </div>
+
+        <div class="image">
+            <img src="~/assets/images/book-now.jpg" alt="" style="width: 600px;" />
+        </div>
+    </div>
+    <a asp-controller="BookNow" asp-action="Index" class="btn">check availability</a>
+</section>
+
+<!-- end -->

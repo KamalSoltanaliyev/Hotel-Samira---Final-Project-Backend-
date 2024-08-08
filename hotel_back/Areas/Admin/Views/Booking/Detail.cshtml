@@ -1,0 +1,27 @@
+﻿@model Booking
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<div class="content-wrapper">
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">Name: @Model.Name</p>
+                    <p class="card-text">Surname: @Model.Surname</p>
+                    <p class="card-text">Phone Number: @Model.PhoneNumber</p>
+                    <p class="card-text">Check In: @Model.CheckIn</p>
+                    <p class="card-text">Check Out: @Model.CheckOut</p>
+                    <p class="card-text">Adults: @Model.Adults</p>
+                    <p class="card-text">Children: @Model.Children</p>
+                    <p class="card-text">Rooms: @Model.Rooms</p>
+                    <p class="card-text">Room Type: @Model.Category.Name</p>
+                    <p class="card-text">Special Requests: @Model.SpecialRequests</p>
+                    <a asp-action="Index" class="btn btn-primary">Go Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

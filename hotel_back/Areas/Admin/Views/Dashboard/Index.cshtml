@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .admin-panel {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+            .admin-panel p {
+                font-size: 1.2em;
+            }
+
+            .admin-panel .btn {
+                margin-left: 15px;
+            }
+
+            .admin-panel .table td {
+                vertical-align: middle;
+            }
+
+        .btn{
+            background-color: #26436c;
+        }
+
+        .btn:hover{
+                background-color: #ac9c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container admin-panel">
+        <h1>Welcome to admin panel!</h1>
+        <table class="table table-borderless">
+            <tbody>
+                <tr>
+                    <h5>Here you can change elements on the hotel website.</h5>
+                </tr>
+                <tr>
+                    <td>Namely: Slider on the home page, review slider on the home page.</td>
+                    <td><a asp-controller="Slider" class="btn btn-primary">Home Page Slider</a></td>
+                    <td><a asp-controller="Review" class="btn btn-primary">Review Slider</a></td>
+                </tr>
+                <tr>
+                    <td>Add, edit and delete photos in the gallery page</td>
+                    <td><a asp-controller="Photos" asp-action="Index" class="btn btn-primary">Gallery</a></td>
+                </tr>
+                <tr>
+                    <td>You can also make changes to the rooms.</td>
+                    <td><a asp-controller="Product" asp-action="Index" class="btn btn-primary">Rooms</a></td>
+                </tr>
+                <tr>
+                    <td>You can manage user settings.</td>
+                    <td><a asp-controller="Users" asp-action="Index" class="btn btn-primary">User Settings</a></td>
+                </tr>
+                <tr>
+                    <td>And see reserved rooms</td>
+                    @* <td><a asp-controller="Reservation" asp-action="Index" class="btn btn-primary">Reserved Rooms</a></td> *@
+                    <td><a asp-controller="Booking" asp-action="Index" class="btn btn-primary">Bookings</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

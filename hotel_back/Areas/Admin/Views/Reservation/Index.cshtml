@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">Reservations</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>Room Title</th>
+                            <th>Room Details</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td>Name</td>
+                                <td>Room 1</td>
+                            <td><a asp-action="Detail" class="btn btn-info">Detail</a></td>
+                            <td>
+                                <a class="btn btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .img-thumbnail {
+        max-width: 100px;
+        max-height: 100px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .btn-group .btn {
+        margin-right: 5px;
+    }
+</style>
+
+

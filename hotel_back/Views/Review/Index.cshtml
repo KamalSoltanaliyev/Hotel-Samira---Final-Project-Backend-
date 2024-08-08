@@ -1,0 +1,177 @@
+﻿@{
+    ViewData["Title"] = "Review";
+}
+@model ReviewPageViewModel
+<link rel="stylesheet" href="~/assets/css/review.css" />
+<style>
+    .edit-comment-form {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .comment-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .edit-comment-form .rating label {
+        color: #ccc; 
+        font-size: 24px;
+        margin: 0 2px;
+        cursor: pointer;
+    }
+
+    .edit-comment-form .rating input {
+        display: none;
+    }
+
+        .edit-comment-form .rating input:checked ~ label {
+            color: #ffcc00;
+        }
+
+            .edit-comment-form .rating label:hover,
+            .edit-comment-form .rating label:hover ~ label,
+            .edit-comment-form .rating input:checked ~ label,
+            .edit-comment-form .rating input:checked ~ label ~ label,
+            .edit-comment-form .rating input:hover ~ label,
+            .edit-comment-form .rating input:hover ~ label ~ label {
+                color: #ffcc00; 
+            }
+
+    .error-message {
+        color: red;
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: medium;
+    }
+</style>
+
+<section id="testimonials">
+    <section class="comments">
+        <h2 class="comments-heading">Your opinion is important to Us!</h2>
+        <form asp-action="AddReview" method="post" id="add-review">
+            <div class="comment-form">
+                <div class="error-message" id="error-message" style="display: none;">Please write your review.</div>
+                <div class="rating">
+                    @for (int i = 5; i >= 1; i--)
+                    {
+                        <input type="radio" asp-for="ReviewForm.Rating" id="rating-@i" value="@i" />
+                        <label for="rating-@i" class="fas fa-star"></label>
+                    }
+                </div>
+                <textarea style="font-size: 15px;" id="review-text" placeholder="Write your comment here..." rows="5" asp-for="ReviewForm.Description"></textarea>
+                <input type="hidden" name="userId" value="@User.Identity.Name" />
+                <button type="submit" class="btn" id="submit-comment">Submit Review</button>
+            </div>
+        </form>
+    </section>
+
+    <div class="testimonial-box-container" id="comment-list">
+        @foreach (var review in Model.ReviewUsers)
+        {
+            if (!review.IsDeleted)
+            {
+                <div class="testimonial-box" id="review-@review.Id">
+                    <div class="box-top">
+                        <div class="profile">
+                            <div class="name-user">
+                                <strong>@review.User.UserName</strong>
+                            </div>
+                        </div>
+                        <div class="reviews">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= review.Rating)
+                                {
+                                    <i class="fas fa-star"></i>
+                                }
+                                else
+                                {
+                                    <i class="far fa-star"></i>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="client-comment">
+                        <p>@review.Description</p>
+                    </div>
+                    @if (User.Identity.IsAuthenticated && User.Identity.Name == review.User.UserName)
+                    {
+                        <div class="comment-actions">
+                            <button class="btn edit-button" data-review-id="@review.Id" data-review-rating="@review.Rating" data-review-description="@review.Description">Edit</button>
+                            <form asp-action="DeleteReview" asp-controller="Review" method="post">
+                                <input type="hidden" name="reviewId" value="@review.Id" />
+                                <button class="btn" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+
+                <div class="edit-comment-form" id="edit-comment-form-@review.Id">
+                    <form asp-action="UpdateReview" method="post">
+                        <div class="rating">
+                            @for (int i = 5; i >= 1; i--)
+                            {
+                                <input type="radio" asp-for="ReviewForm.Rating" id="edit-rating-@review.Id-@i" value="@i" />
+                                <label for="edit-rating-@review.Id-@i" class="fas fa-star"></label>
+                            }
+                        </div>
+                        <textarea asp-for="ReviewForm.Description" id="edit-review-text-@review.Id" rows="5">@review.Description</textarea>
+                        <input type="hidden" name="reviewId" value="@review.Id" />
+                        <button type="submit" class="btn">Update Comment</button>
+                        <button type="button" class="btn cancel-button" data-review-id="@review.Id">Cancel</button>
+                    </form>
+                </div>
+            }
+        }
+    </div>
+</section>
+
+<script src="~/assets/js/review.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', function () {
+                var reviewId = this.getAttribute('data-review-id');
+                var rating = this.getAttribute('data-review-rating');
+                var description = this.getAttribute('data-review-description');
+
+                document.querySelectorAll('.edit-comment-form').forEach(form => form.style.display = 'none');
+
+                var editForm = document.getElementById(`edit-comment-form-${reviewId}`);
+                editForm.style.display = 'flex';
+
+                document.querySelectorAll(`#edit-comment-form-${reviewId} .rating input`).forEach(radio => {
+                    radio.checked = radio.value == rating;
+                });
+                document.getElementById(`edit-review-text-${reviewId}`).value = description;
+            });
+        });
+
+        document.querySelectorAll('.cancel-button').forEach(button => {
+            button.addEventListener('click', function () {
+                var reviewId = this.getAttribute('data-review-id');
+                var editForm = document.getElementById(`edit-comment-form-${reviewId}`);
+                editForm.style.display = 'none';
+            });
+        });
+
+        document.getElementById('add-review').addEventListener('submit', function (e) {
+            var commentText = document.getElementById('review-text').value.trim();
+            var errorMessage = document.getElementById('error-message');
+
+            if (commentText === '') {
+                e.preventDefault();
+                errorMessage.style.display = 'block';
+            } else {
+                errorMessage.style.display = 'none';
+            }
+        });
+    });
+</script>

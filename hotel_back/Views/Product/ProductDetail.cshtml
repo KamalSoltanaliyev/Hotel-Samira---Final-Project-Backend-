@@ -1,0 +1,652 @@
+﻿@{
+    ViewData["Title"] = "ProductDetail";
+}
+
+@{
+    int count = 0;
+}
+
+@model ProductDetailPageViewModel
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<!-- swiper js cdn link -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&display=swap"
+      rel="stylesheet" />
+
+
+<link rel="stylesheet" href="~/assets/css/index.css" />
+<link rel="stylesheet" href="~/assets/css/product.css" />
+
+<style>
+    .card-wrapper {
+        margin-top: 100px;
+    }
+
+    .comments {
+        width: 100%;
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .comment-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .comment-form .rating {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            resize: none;
+            margin-bottom: 10px;
+        }
+
+    .comment-list {
+        margin-top: 20px;
+    }
+
+    .comment-item {
+        margin-bottom: 20px;
+    }
+
+        .comment-item .comment-author {
+            margin-bottom: 5px;
+        }
+
+        .comment-item .comment-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .comment-item .comment-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+    media (max-width: 768px) {
+        .comment-form textarea
+
+    {
+        height: 100px;
+    }
+
+    .comment-item .comment-author {
+        font-size: 1em;
+    }
+
+    .comment-item .comment-text {
+        font-size: 0.9em;
+    }
+
+    }
+
+    .edit-comment-form {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .img-select {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .img-item {
+        flex: 1 1 100px;
+        margin: 5px;
+        max-width: 120px;
+        overflow: hidden;
+    }
+
+        .img-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            display: block;
+        }
+
+
+    .error-message {
+        color: red;
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: medium;
+    }
+</style>
+
+
+<!-- end header area -->
+
+<div class="card-wrapper">
+    <div class="card">
+        <!-- card left -->
+        <div class="product-imgs">
+            <div class="img-display">
+                <div class="img-showcase">
+                    @if (Model.ProductDetail.Images.FirstOrDefault(i => i.Image != null) != null)
+                    {
+                        @foreach (var image in Model.ProductDetail.Images)
+                        {
+                            <img src="~/assets/images/@image.Image" alt="" />
+                        }
+                    }
+                </div>
+            </div>
+            <div class="img-select">
+
+                @foreach (var item in Model.ProductDetail.Images)
+                {
+                    count++;
+                    <div class="img-item">
+                        <a href="#" data-id="@count">
+                            <img src="~/assets/images/@item.Image" alt="product image" />
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+        <!-- card right -->
+        <div class="product-content">
+            <h2 class="product-title">@Model.ProductDetail.Title</h2>
+            <div class="product-rating">
+                @{
+                    int fullStars = (int)Math.Floor(Model.ProductDetail.Rating);
+                    bool hasHalfStar = Model.ProductDetail.Rating - fullStars >= 0.5;
+                    int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                }
+
+                @for (var i = 0; i < fullStars; i++)
+                {
+                    <i class="fas fa-star"></i>
+                }
+                @if (hasHalfStar)
+                {
+                    <i class="fas fa-star-half-alt"></i>
+                }
+                @for (var i = 0; i < emptyStars; i++)
+                {
+                    <i class="far fa-star"></i>
+                }
+            </div>
+
+            <div class="product-price">
+                <p class="new-price">Price: <span>$@Model.ProductDetail.Price/night</span></p>
+            </div>
+
+            <div class="product-detail">
+                <h2>About This room:</h2>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo
+                    eveniet veniam tempora fuga tenetur placeat sapiente architecto
+                    illum soluta consequuntur, aspernatur quidem at sequi ipsa!
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Consequatur, perferendis eius. Dignissimos, labore suscipit. Unde.
+                </p>
+                <ul>
+                    <li>Room Type: <span>@Model.ProductDetail.Category.Name</span></li>
+                    <li>Rooms: <span>@Model.ProductDetail.Rooms</span></li>
+                    <li>Adults: <span>@Model.ProductDetail.Adults</span></li>
+                    <li>Children: <span>@Model.ProductDetail.Children</span></li>
+                    <li>Floor: <span>@Model.ProductDetail.Floor</span></li>
+                    <li>Number of Beds: <span>@Model.ProductDetail.NumberOfBeds</span></li>
+                    <li>Bed Size: <span>@Model.ProductDetail.BedSize</span></li>
+                    <li>Area: <span>@Model.ProductDetail.Area</span></li>
+                    <li>Check In: <span>@Model.ProductDetail.CheckIn</span></li>
+                    <li>Check Out: <span>@Model.ProductDetail.CheckOut</span></li>
+                </ul>
+            </div>
+
+            <div class="purchase-info">
+                <a type="button" class="btn" asp-controller="BookNow" asp-action="Index">
+                    Reserve
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- comments section -->
+<section class="comments">
+    <h2 class="comments-heading">Comments</h2>
+    <form asp-action="AddComment" method="post" id="add-comment">
+        <div class="comment-form">
+            <div class="error-message" id="error-message" style="display: none;"></div>
+            <div class="rating">
+                @for (int i = 5; i >= 1; i--)
+                {
+                    <input type="radio" asp-for="CommentForm.Rating" id="rating-@i" value="@i" ) />
+                    <label for="rating-@i" class="fas fa-star"></label>
+                }
+            </div>
+            <textarea placeholder="Write your comment here..." rows="5" asp-for="CommentForm.Description" id="comment-text">@Model.CommentForm.Description</textarea>
+            <input type="hidden" name="productId" value="@Model.ProductDetail.ProductId" />
+            <input type="hidden" name="userId" value="@User.Identity.Name" />
+            <button type="submit" class="btn">Submit Comment</button>
+        </div>
+    </form>
+    <div class="comment-list" id="comment-list">
+        @foreach (var comment in Model.ProductDetail.Comments.Where(c => c.ProductId == Model.ProductDetail.ProductId))
+        {
+            if (!comment.IsDeleted)
+            {
+                <div class="comment-item" id="comment-@comment.Id">
+                    <div class="comment-author">
+                        <strong>@comment.User.UserName</strong>
+                    </div>
+                    <div class="comment-rating">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= comment.Rating)
+                            {
+                                <i class="fas fa-star"></i>
+                            }
+                            else
+                            {
+                                <i class="far fa-star"></i>
+                            }
+                        }
+                    </div>
+                    <div class="comment-text">@comment.Description</div>
+                    @if (User.Identity.IsAuthenticated && User.Identity.Name == comment.User.UserName)
+                    {
+                        <div class="comment-actions">
+                            <button class="btn edit-button" data-comment-id="@comment.Id" data-comment-rating="@comment.Rating" data-comment-description="@comment.Description">Edit</button>
+                            <form asp-action="DeleteComment" asp-controller="Product" method="post">
+                                <input type="hidden" name="commentId" value="@comment.Id" />
+                                <button class="btn" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+                <!-- Edit form, initially hidden -->
+                <div class="edit-comment-form" id="edit-comment-form-@comment.Id">
+                    <form asp-action="UpdateComment" method="post">
+                        <div class="rating">
+                            @for (int i = 5; i >= 1; i--)
+                            {
+                                <input type="radio" asp-for="CommentForm.Rating" id="edit-rating-@comment.Id-@i" value="@i" ) />
+                                <label for="edit-rating-@comment.Id-@i" class="fas fa-star"></label>
+                            }
+                        </div>
+                        <textarea asp-for="CommentForm.Description" id="edit-comment-text-@comment.Id" rows="5">@comment.Description</textarea>
+                        <input type="hidden" name="commentId" value="@comment.Id" />
+                        <button type="submit" class="btn">Update Comment</button>
+                        <button type="button" class="btn cancel-button" data-comment-id="@comment.Id">Cancel</button>
+                    </form>
+                </div>
+            }
+        }
+    </div>
+</section>
+
+<!-- end comments section -->
+<!-- room -->
+
+<section class="room" id="room">
+    <h1 class="heading">Other Rooms</h1>
+
+    <div class="swiper room-slider">
+        <div class="swiper-wrapper">
+            @foreach (var product in Model.ProductDetail.Products)
+            {
+                <div class="swiper-slide slide">
+                    <div class="image">
+                        <span class="price">$@product.Price/night</span>
+                        @if (@product.Images.FirstOrDefault(i => i.Image != null) != null)
+                        {
+                            <img src="~/assets/images/@product.Images.FirstOrDefault(i => i.Image != null).Image" alt="" />
+                        }
+                    </div>
+                    <div class="content">
+                        <h3>@product.Title</h3>
+                        <p>
+                            @product.Description
+                        </p>
+                        <div class="stars">
+                            @{
+                                int FullStars = (int)Math.Floor(product.Rating);
+                                bool HasHalfStar = product.Rating - FullStars >= 0.5;
+                                int EmptyStars = 5 - FullStars - (HasHalfStar ? 1 : 0);
+                            }
+
+                            @for (var i = 0; i < FullStars; i++)
+                            {
+                                <i class="fas fa-star"></i>
+                            }
+                            @if (hasHalfStar)
+                            {
+                                <i class="fas fa-star-half-alt"></i>
+                            }
+                            @for (var i = 0; i < EmptyStars; i++)
+                            {
+                                <i class="far fa-star"></i>
+                            }
+                        </div>
+                        <a asp-controller="Product" asp-action="ProductDetail" asp-route-id="@product.Id" class="btn">details</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+
+<!-- end -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+<script src="~/assets/js/index.js"></script>
+
+<script>
+    const imgs = document.querySelectorAll(".img-select a");
+    const imgBtns = [...imgs];
+    let imgId = 1;
+
+    imgBtns.forEach((imgItem) => {
+        imgItem.addEventListener("click", (event) => {
+            event.preventDefault();
+            imgId = imgItem.dataset.id;
+            slideImage();
+        });
+    });
+
+    function slideImage() {
+        const displayWidth = document.querySelector(
+            ".img-showcase img:first-child"
+        ).clientWidth;
+
+        document.querySelector(".img-showcase").style.transform = `translateX(${-(imgId - 1) * displayWidth
+            }px)`;
+    }
+
+    window.addEventListener("resize", slideImage);
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const submitButton = document.getElementById("submit-comment");
+        const commentList = document.getElementById("comment-list");
+        const ratingInputs = document.querySelectorAll('input[name="rating"]');
+        const commentTextarea = document.querySelector(".comment-form textarea");
+        const averageRatingDisplay = document.createElement("div");
+
+
+        commentList.parentElement.insertBefore(averageRatingDisplay, commentList);
+
+        submitButton.addEventListener("click", function () {
+            let selectedRating;
+            for (const input of ratingInputs) {
+                if (input.checked) {
+                    selectedRating = input.value;
+                    break;
+                }
+            }
+
+            const commentText = commentTextarea.value.trim();
+
+            if (!selectedRating || !commentText) {
+                alert("Please select a rating and write a comment.");
+                return;
+            }
+
+            const commentItem = document.createElement("div");
+            commentItem.className = "comment-item";
+
+            const commentAuthor = document.createElement("h3");
+            commentAuthor.className = "comment-author";
+            commentAuthor.textContent = "Anonymous"; // Здесь можно добавить функциональность для ввода имени
+
+            const commentRating = document.createElement("div");
+            commentRating.className = "comment-rating";
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement("i");
+                star.className =
+                    i <= selectedRating ? "fas fa-star" : "far fa-star";
+                commentRating.appendChild(star);
+            }
+
+            const commentTextElement = document.createElement("p");
+            commentTextElement.className = "comment-text";
+            commentTextElement.textContent = commentText;
+
+            const commentActions = document.createElement("div");
+            commentActions.className = "comment-actions";
+            const editButton = document.createElement("button");
+            editButton.className = "edit-comment btn";
+            editButton.textContent = "Edit";
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-comment btn";
+            deleteButton.textContent = "Delete";
+
+            commentActions.appendChild(editButton);
+            commentActions.appendChild(deleteButton);
+
+            commentItem.appendChild(commentAuthor);
+            commentItem.appendChild(commentRating);
+            commentItem.appendChild(commentTextElement);
+            commentItem.appendChild(commentActions);
+
+            commentList.appendChild(commentItem);
+
+            editButton.addEventListener("click", editComment);
+            deleteButton.addEventListener("click", deleteComment);
+
+            // Обновление среднего рейтинга
+            updateAverageRating();
+
+            // Очистка формы
+            for (const input of ratingInputs) {
+                input.checked = false;
+            }
+            commentTextarea.value = "";
+        });
+
+
+
+
+
+
+        function editComment(event) {
+            const commentBox = event.target.closest(".comment-item");
+            const commentText = commentBox.querySelector(".comment-text").innerText;
+            const rating = commentBox
+                .querySelector(".comment-rating")
+                .querySelectorAll(".fa-star").length;
+
+            commentTextarea.value = commentText;
+            document.querySelector(
+                `input[name="rating"][value="${rating}"]`
+            ).checked = true;
+
+            commentBox.remove();
+
+            updateAverageRating();
+        }
+
+        function deleteComment(event) {
+            const commentBox = event.target.closest(".comment-item");
+            commentBox.remove();
+            updateAverageRating();
+        }
+
+        document
+            .querySelectorAll(".edit-comment")
+            .forEach((button) => button.addEventListener("click", editComment));
+
+        document
+            .querySelectorAll(".delete-comment")
+            .forEach((button) => button.addEventListener("click", deleteComment));
+    });
+
+    document.getElementById("reserveButton").addEventListener("click", function () {
+        if (this.textContent === "Reserve") {
+            this.textContent = "Reserved";
+        } else {
+            this.textContent = "Reserve";
+        }
+    });
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', function () {
+                var commentId = this.getAttribute('data-comment-id');
+                var rating = this.getAttribute('data-comment-rating');
+                var description = this.getAttribute('data-comment-description');
+
+                // Hide all edit forms
+                document.querySelectorAll('.edit-comment-form').forEach(form => form.style.display = 'none');
+
+                // Show the edit form for this comment
+                var editForm = document.getElementById(`edit-comment-form-${commentId}`);
+                editForm.style.display = 'flex';
+
+                // Set the values for the form inputs
+                document.querySelectorAll(`#edit-comment-form-${commentId} .rating input`).forEach(radio => {
+                    radio.checked = radio.value == rating;
+                });
+                document.getElementById(`edit-comment-text-${commentId}`).value = description;
+            });
+        });
+
+        document.querySelectorAll('.cancel-button').forEach(button => {
+            button.addEventListener('click', function () {
+                var commentId = this.getAttribute('data-comment-id');
+                var editForm = document.getElementById(`edit-comment-form-${commentId}`);
+                editForm.style.display = 'none';
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const submitButton = document.querySelector(".comment-form button[type='submit']");
+        const commentTextarea = document.querySelector(".comment-form textarea");
+        const errorMessage = document.getElementById("error-message");
+
+        submitButton.addEventListener("click", function (event) {
+            if (!commentTextarea.value.trim()) {
+                event.preventDefault();
+                errorMessage.style.display = "block";
+                errorMessage.textContent = "Please write your comment before submitting.";
+            } else {
+                errorMessage.style.display = "none";
+            }
+        });
+
+        const ratingInputs = document.querySelectorAll('input[name="CommentForm.Rating"]');
+        const commentList = document.getElementById("comment-list");
+        const averageRatingDisplay = document.createElement("div");
+
+        averageRatingDisplay.style.fontSize = "15px"; // Увеличение размера шрифта
+        averageRatingDisplay.style.fontWeight = "bold"; // Дополнительно можно сделать текст жирным
+
+        commentList.parentElement.insertBefore(averageRatingDisplay, commentList);
+
+        function updateAverageRating() {
+            const comments = document.querySelectorAll(".comment-item");
+            let totalRating = 0;
+            let commentCount = 0;
+
+            comments.forEach(comment => {
+                const stars = comment.querySelectorAll(".fas.fa-star");
+                totalRating += stars.length;
+                commentCount++;
+            });
+
+            const averageRating = commentCount ? (totalRating / commentCount).toFixed(1) : 0;
+            averageRatingDisplay.textContent = `Average Rating : ${averageRating}`;
+        }
+
+        updateAverageRating();
+
+        function editComment(event) {
+            const commentBox = event.target.closest(".comment-item");
+            const commentText = commentBox.querySelector(".comment-text").innerText;
+            const rating = commentBox
+                .querySelector(".comment-rating")
+                .querySelectorAll(".fa-star").length;
+
+            commentTextarea.value = commentText;
+            document.querySelector(
+                `input[name="CommentForm.Rating"][value="${rating}"]`
+            ).checked = true;
+
+            commentBox.remove();
+
+            updateAverageRating();
+        }
+
+        function deleteComment(event) {
+            const commentBox = event.target.closest(".comment-item");
+            commentBox.remove();
+            updateAverageRating();
+        }
+
+        document
+            .querySelectorAll(".edit-comment")
+            .forEach((button) => button.addEventListener("click", editComment));
+
+        document
+            .querySelectorAll(".delete-comment")
+            .forEach((button) => button.addEventListener("click", deleteComment));
+    });
+
+    document.getElementById("reserveButton").addEventListener("click", function () {
+        if (this.textContent === "Reserve") {
+            this.textContent = "Reserved";
+        } else {
+            this.textContent = "Reserve";
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.edit-button').forEach(button => {
+            button.addEventListener('click', function () {
+                var commentId = this.getAttribute('data-comment-id');
+                var rating = this.getAttribute('data-comment-rating');
+                var description = this.getAttribute('data-comment-description');
+
+                // Hide all edit forms
+                document.querySelectorAll('.edit-comment-form').forEach(form => form.style.display = 'none');
+
+                // Show the edit form for this comment
+                var editForm = document.getElementById(`edit-comment-form-${commentId}`);
+                editForm.style.display = 'flex';
+
+                // Set the values for the form inputs
+                document.querySelectorAll(`#edit-comment-form-${commentId} .rating input`).forEach(radio => {
+                    radio.checked = radio.value == rating;
+                });
+                document.getElementById(`edit-comment-text-${commentId}`).value = description;
+            });
+        });
+
+        document.querySelectorAll('.cancel-button').forEach(button => {
+            button.addEventListener('click', function () {
+                var commentId = this.getAttribute('data-comment-id');
+                var editForm = document.getElementById(`edit-comment-form-${commentId}`);
+                editForm.style.display = 'none';
+            });
+        });
+    });
+</script>
